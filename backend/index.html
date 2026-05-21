@@ -1,0 +1,255 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>REST API Demo</title>
+
+  <style>
+
+    body{
+      font-family: Arial;
+      background:#f4f4f4;
+      padding:20px;
+    }
+
+    h1{
+      color:#333;
+    }
+
+    .box{
+      background:white;
+      padding:20px;
+      margin-bottom:20px;
+      border-radius:10px;
+    }
+
+    input{
+      padding:10px;
+      margin:5px;
+      width:250px;
+    }
+
+    button{
+      padding:10px 15px;
+      cursor:pointer;
+    }
+
+    pre{
+      background:#222;
+      color:#0f0;
+      padding:15px;
+      border-radius:10px;
+      overflow:auto;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>REST API Full Demo</h1>
+
+  <!-- CREATE USER -->
+  <div class="box">
+
+    <h2>Create User (POST)</h2>
+
+    <input type="text" id="name" placeholder="Enter Name">
+    <input type="email" id="email" placeholder="Enter Email">
+
+    <button onclick="createUser()">
+      Create User
+    </button>
+
+  </div>
+
+
+
+  <!-- GET USERS -->
+  <div class="box">
+
+    <h2>Get Users (GET)</h2>
+
+    <button onclick="getUsers()">
+      Fetch Users
+    </button>
+
+  </div>
+
+
+
+  <!-- UPDATE USER -->
+  <div class="box">
+
+    <h2>Update User (PUT)</h2>
+
+    <input type="number" id="updateId" placeholder="User ID">
+    <input type="text" id="updateName" placeholder="New Name">
+
+    <button onclick="updateUser()">
+      Update User
+    </button>
+
+  </div>
+
+
+
+  <!-- DELETE USER -->
+  <div class="box">
+
+    <h2>Delete User (DELETE)</h2>
+
+    <input type="number" id="deleteId" placeholder="User ID">
+
+    <button onclick="deleteUser()">
+      Delete User
+    </button>
+
+  </div>
+
+
+
+  <!-- OUTPUT -->
+  <div class="box">
+
+    <h2>Response</h2>
+
+    <pre id="output"></pre>
+
+  </div>
+
+
+
+<script>
+
+const API_URL = "http://localhost:3000/users";
+
+const output = document.getElementById("output");
+
+
+
+// GET METHOD
+async function getUsers(){
+
+  try{
+
+    const response = await fetch(API_URL);
+
+    const data = await response.json();
+
+    output.innerText = JSON.stringify(data,null,2);
+
+  }catch(error){
+
+    output.innerText = error;
+
+  }
+
+}
+
+
+
+// POST METHOD
+async function createUser(){
+
+  try{
+
+    const name = document.getElementById("name").value;
+
+    const email = document.getElementById("email").value;
+
+    const response = await fetch(API_URL,{
+
+      method:"POST",
+
+      headers:{
+        "Content-Type":"application/json"
+      },
+
+      body:JSON.stringify({
+        name:name,
+        email:email
+      })
+
+    });
+
+    const data = await response.json();
+
+    output.innerText = JSON.stringify(data,null,2);
+
+  }catch(error){
+
+    output.innerText = error;
+
+  }
+
+}
+
+
+
+// PUT METHOD
+async function updateUser(){
+
+  try{
+
+    const id = document.getElementById("updateId").value;
+
+    const name = document.getElementById("updateName").value;
+
+    const response = await fetch(`${API_URL}/${id}`,{
+
+      method:"PUT",
+
+      headers:{
+        "Content-Type":"application/json"
+      },
+
+      body:JSON.stringify({
+        name:name
+      })
+
+    });
+
+    const data = await response.json();
+
+    output.innerText = JSON.stringify(data,null,2);
+
+  }catch(error){
+
+    output.innerText = error;
+
+  }
+
+}
+
+
+
+// DELETE METHOD
+async function deleteUser(){
+
+  try{
+
+    const id = document.getElementById("deleteId").value;
+
+    const response = await fetch(`${API_URL}/${id}`,{
+
+      method:"DELETE"
+
+    });
+
+    const data = await response.json();
+
+    output.innerText = JSON.stringify(data,null,2);
+
+  }catch(error){
+
+    output.innerText = error;
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>

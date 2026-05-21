@@ -116,22 +116,129 @@
 
 
 // example of middeleware 
+// const express = require("express");
+
+// const app = e
+
+
 const express = require("express");
+const cors = require("cors");
 
 const app = express();
 
-const logger = (req, res, next) => {
 
-   console.log("Middleware running");
+// MIDDLEWARE
+app.use(cors());
+app.use(express.json());
 
-   next();
-};
 
-app.use(logger);
 
-app.get("/", (req, res) => {
+// FAKE DATABASE
+let users = [
+  {
+    id:1,
+    name:"Aman",
+    email:"aman@gmail.com"
+  }
+];
 
-   res.send("Home page");
+
+
+
+// GET USERS
+app.get("/users",(req,res)=>{
+
+  res.status(200).json(users);
+
 });
 
-app.listen(3000); 
+
+
+
+// CREATE USER
+app.post("/users",(req,res)=>{
+
+  const newUser = {
+
+    id:users.length + 1,
+
+    name:req.body.name,
+
+    email:req.body.email
+
+  };
+
+  users.push(newUser);
+
+  res.status(201).json({
+
+    message:"User created",
+
+    user:newUser
+
+  });
+
+});
+
+
+
+
+
+// UPDATE USER
+app.put("/users/:id",(req,res)=>{
+
+  const id = parseInt(req.params.id);
+
+  const user = users.find(u => u.id === id);
+
+  if(!user){
+
+    return res.status(404).json({
+      error:"User not found"
+    });
+
+  }
+
+  user.name = req.body.name;
+
+  res.status(200).json({
+
+    message:"User updated",
+
+    user:user
+
+  });
+
+});
+
+
+
+
+
+
+// DELETE USER
+app.delete("/users/:id",(req,res)=>{
+
+  const id = parseInt(req.params.id);
+
+  users = users.filter(u => u.id !== id);
+
+  res.status(200).json({
+
+    message:"User deleted"
+
+  });
+
+});
+
+
+
+
+
+
+// SERVER
+app.listen(3000,()=>{
+
+  console.log("Server running on port 3000");
+
+});
