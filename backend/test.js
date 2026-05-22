@@ -245,3 +245,12 @@
 
 
 // rest api 
+// REST API ek API hoti hai jo REST rules follow karti hai.
+
+// Example:
+
+// GET /users
+
+// Iska matlab:
+
+// Server se users ka data lao.
