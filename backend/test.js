@@ -234,8 +234,6 @@
 
 
 
-
-
 // // SERVER
 // app.listen(3000,()=>{
 
@@ -253,4 +251,45 @@
 
 // Iska matlab:
 
-// Server se users ka data lao.
+// Server se users ka data lao.REST API — Complete Beginner to Practical Guide 🚀
+
+
+
+
+//query parameter, and path parameter 
+
+const express = require("express");
+
+const app = express();
+
+const users = [
+  { id: 1, name: "Rahul", age: 20 },
+  { id: 2, name: "Aman", age: 22 },
+  { id: 3, name: "Rohit", age: 20 },
+  { id: 4, name: "Neha", age: 25 }
+];
+
+// PATH PARAM EXAMPLE
+app.get("/users/:id", (req, res) => {
+  const id = Number(req.params.id);
+
+  const user = users.find((u) => u.id === id);
+
+  res.json(user);
+});
+
+// QUERY PARAM EXAMPLE
+app.get("/users", (req, res) => {
+  const age = Number(req.query.age);
+
+  const filteredUsers = users.filter(
+    (u) => u.age === age
+  );
+
+  res.json(filteredUsers);
+});
+
+app.listen(5000, () => {
+  console.log("Server running on port 5000");
+});  
+
