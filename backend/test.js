@@ -307,79 +307,45 @@
 //   console.log("Server running on port 5000");
 // });
 
+//  
+
+
+// new topic database postgreSQL and pagination
 const express = require("express");
-const app = express();
+const pool = require("../db");
 
-app.use(express.json());
+const router = express.Router();
 
-let users = [
-  { id: 1, name: "Rahul" },
-  { id: 2, name: "Aman" }
-];
+router.get("/", async (req, res) => {
+  try {
 
-// GET - Sab users
-app.get("/users", (req, res) => {
-  res.json(users);
-});
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 2;
 
-// GET - Single user
-app.get("/users/:id", (req, res) => {
-  const user = users.find(u => u.id == req.params.id);
+    const offset = (page - 1) * limit;
 
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
+    const result = await pool.query(
+      `
+      SELECT *
+      FROM users
+      ORDER BY id
+      LIMIT $1 OFFSET $2
+      `,
+      [limit, offset]
+    );
+
+    res.json({
+      page,
+      limit,
+      data: result.rows
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Server Error"
+    });
   }
-
-  res.json(user);
 });
 
-// POST - Naya user
-app.post("/users", (req, res) => {
-  const newUser = {
-    id: users.length + 1,
-    name: req.body.name
-  };
-
-  users.push(newUser);
-
-  res.status(201).json({
-    message: "User created",
-    user: newUser
-  });
-});
-
-// PUT - User update
-app.put("/users/:id", (req, res) => {
-  const user = users.find(u => u.id == req.params.id);
-
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
-  }
-
-  user.name = req.body.name;
-
-  res.json({
-    message: "User updated",
-    user
-  });
-});
-
-// DELETE - User delete
-app.delete("/users/:id", (req, res) => {
-  const index = users.findIndex(u => u.id == req.params.id);
-
-  if (index === -1) {
-    return res.status(404).json({ message: "User not found" });
-  }
-
-  const deletedUser = users.splice(index, 1);
-
-  res.json({
-    message: "User deleted",
-    user: deletedUser[0]
-  });
-});
-
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
-});
+module.exports = router;
