@@ -352,7 +352,55 @@
 
 
 // filtering  wich condition dimand  and response on this condition
- const express = require("express");
+//  const express = require("express");
+// const app = express();
+
+// const products = [
+//   {
+//     id: 1,
+//     name: "iPhone 15",
+//     category: "mobile",
+//     brand: "apple"
+//   },
+//   {
+//     id: 2,
+//     name: "Galaxy S24",
+//     category: "mobile",
+//     brand: "samsung"
+//   },
+//   {
+//     id: 3,
+//     name: "MacBook",
+//     category: "laptop",
+//     brand: "apple"
+//   }
+// ];
+
+// // GET /products
+// app.get("/products", (req, res) => {
+//   const category = req.query.category;
+
+//   let result = products;
+
+//   if (category) {
+//     result = products.filter(
+//       (p) => p.category.toLowerCase() === category.toLowerCase()
+//     );
+//   }
+
+//   res.json(result);
+// });
+
+// const PORT = 3000;
+
+// app.listen(PORT, () => {
+//   console.log(`Server running on port ${PORT}`);
+// });
+// // this is a url for filtering http://localhost:3000/products?category=mobile
+
+
+//new topic sorting and filerting sath me 
+const express = require("express");
 const app = express();
 
 const products = [
@@ -360,39 +408,79 @@ const products = [
     id: 1,
     name: "iPhone 15",
     category: "mobile",
-    brand: "apple"
+    brand: "apple",
+    price: 80000
   },
   {
     id: 2,
     name: "Galaxy S24",
     category: "mobile",
-    brand: "samsung"
+    brand: "samsung",
+    price: 70000
   },
   {
     id: 3,
     name: "MacBook",
     category: "laptop",
-    brand: "apple"
+    brand: "apple",
+    price: 120000
+  },
+  {
+    id: 4,
+    name: "Dell XPS",
+    category: "laptop",
+    brand: "dell",
+    price: 90000
   }
 ];
 
-// GET /products
 app.get("/products", (req, res) => {
-  const category = req.query.category;
+  const {
+    category,
+    brand,
+    minPrice,
+    maxPrice,
+    sort
+  } = req.query;
 
-  let result = products;
+  let result = [...products];
 
+  // Filtering
   if (category) {
-    result = products.filter(
-      (p) => p.category.toLowerCase() === category.toLowerCase()
+    result = result.filter(
+      p => p.category.toLowerCase() === category.toLowerCase()
     );
+  }
+
+  if (brand) {
+    result = result.filter(
+      p => p.brand.toLowerCase() === brand.toLowerCase()
+    );
+  }
+
+  if (minPrice) {
+    result = result.filter(
+      p => p.price >= Number(minPrice)
+    );
+  }
+
+  if (maxPrice) {
+    result = result.filter(
+      p => p.price <= Number(maxPrice)
+    );
+  }
+
+  // Sorting by price
+  if (sort === "asc") {
+    result.sort((a, b) => a.price - b.price);
+  } else if (sort === "desc") {
+    result.sort((a, b) => b.price - a.price);
   }
 
   res.json(result);
 });
 
-const PORT = 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
 });
+//http://localhost:3000/products?minPrice=70000&maxPrice=100000 
