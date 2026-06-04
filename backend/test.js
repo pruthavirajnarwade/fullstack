@@ -311,41 +311,88 @@
 
 
 // new topic database postgreSQL and pagination
-const express = require("express");
-const pool = require("../db");
+// const express = require("express");
+// const pool = require("../db");
 
-const router = express.Router();
+// const router = express.Router();
 
-router.get("/", async (req, res) => {
-  try {
+// router.get("/", async (req, res) => {
+//   try {
 
-    const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 2;
+//     const page = Number(req.query.page) || 1;
+//     const limit = Number(req.query.limit) || 2;
 
-    const offset = (page - 1) * limit;
+//     const offset = (page - 1) * limit;
 
-    const result = await pool.query(
-      `
-      SELECT *
-      FROM users
-      ORDER BY id
-      LIMIT $1 OFFSET $2
-      `,
-      [limit, offset]
-    );
+//     const result = await pool.query(
+//       `
+//       SELECT *
+//       FROM users
+//       ORDER BY id
+//       LIMIT $1 OFFSET $2
+//       `,
+//       [limit, offset]
+//     );
 
-    res.json({
-      page,
-      limit,
-      data: result.rows
-    });
+//     res.json({
+//       page,
+//       limit,
+//       data: result.rows
+//     });
 
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      message: "Server Error"
-    });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({
+//       message: "Server Error"
+//     });
+//   }
+// });
+
+// module.exports = router;
+
+
+// filtering  wich condition dimand  and response on this condition
+ const express = require("express");
+const app = express();
+
+const products = [
+  {
+    id: 1,
+    name: "iPhone 15",
+    category: "mobile",
+    brand: "apple"
+  },
+  {
+    id: 2,
+    name: "Galaxy S24",
+    category: "mobile",
+    brand: "samsung"
+  },
+  {
+    id: 3,
+    name: "MacBook",
+    category: "laptop",
+    brand: "apple"
   }
+];
+
+// GET /products
+app.get("/products", (req, res) => {
+  const category = req.query.category;
+
+  let result = products;
+
+  if (category) {
+    result = products.filter(
+      (p) => p.category.toLowerCase() === category.toLowerCase()
+    );
+  }
+
+  res.json(result);
 });
 
-module.exports = router;
+const PORT = 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
