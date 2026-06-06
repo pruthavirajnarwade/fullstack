@@ -49,7 +49,7 @@
 # def check(num):
 
 #     if num % 2 == 0:
-#         return "Even"
+#         return "Even"r
 
 #     return "Odd"
 
@@ -88,10 +88,17 @@
 # print ("My name is " + name,  age)
 
 
-print ("MY name is pruthaviraj ram narwade")   
+# def square(x):
+#    return x*x 
+# print(square(5)) 
 
-print ("MY name is pruthaviraj ram narwade")   
+# file = open("data.txt", "r")
 
-print ("my nam eis raj")
+# print(file.read())
 
-print ("MY name is pruthaviraj ram narwade")   
+name = input("Enter your name: ")
+
+with open("student.txt", "a") as file:
+    file.write(name + "\n")
+
+print("Name Saved!")
