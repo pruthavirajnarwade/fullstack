@@ -96,9 +96,22 @@
 
 # print(file.read())
 
-name = input("Enter your name: ")
+# f = open("data.txt", "w")
+# f.write("Hello")
+# f.close() 
 
-with open("student.txt", "a") as file:
-    file.write(name + "\n")
+# f = open("student.txt", "a")
 
-print("Name Saved!")
+# f.write("\nAmit")
+
+# f.close()
+
+# f = open("student.txt", "r")
+# print(f.readline())
+# f.close()
+
+name = input("Enter name: ")
+
+with open("student.txt", "a") as f:
+    f.write(name + "\n") 
+
