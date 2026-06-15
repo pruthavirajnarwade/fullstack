@@ -92,6 +92,9 @@
 #    return x*x 
 # print(square(5)) 
 
+
+
+# python new topic file handling 
 # file = open("data.txt", "r")
 
 # print(file.read())
@@ -109,9 +112,40 @@
 # f = open("student.txt", "r")
 # print(f.readline())
 # f.close()
+ 
+# python new topic file handling 
+# name = input("Enter name: ")
 
-name = input("Enter name: ")
+# with open("student.txt", "a") as f:
+#     f.write(name + "\n") 
 
-with open("student.txt", "a") as f:
-    f.write(name + "\n") 
 
+
+# exception handling 
+# try:
+# num = int(input("Enter number: "))
+# print(100 / num)
+# except:
+#     print("Cannot divide by zero") 
+
+# try:
+#     print(10 / 0)
+
+# except :
+#     print("Division by zero not allowed")
+
+try:
+    num = int(input("Enter number: "))
+    result = 100 / num
+
+except ValueError:
+    print("Enter numbers only")
+
+except ZeroDivisionError:
+    print("Cannot divide by zero")
+
+else:
+    print("Result:", result)
+
+finally:
+    print("Program Finished")
